@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>🟠 - Intranet Feldgendarmerie</title>
+    <style>
+        body {
+            background-color: rgb(37, 37, 37);
+            text-align: center;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1;
+        }
+        h1 {
+            color: rgb(245, 147, 20)
+        }
+        h4 {
+            color: rgb(226, 226, 226)
+        }
+        h3 {
+            color: rgb(47, 117, 47)
+        }
+        button {
+            border-radius: 12px;
+            background-color: rgb(200, 120, 15); 
+            color: rgb(37, 37, 37);
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            width: 170px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: rgb(200, 120, 15); 
+        }
+        footer {
+            background-color: rgb(53, 53, 53);
+            color: white;
+            text-align: center;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        nav {
+            background-color: rgb(53, 53, 53);
+            padding: 15px 0;
+            top: 0;
+            width: 100%;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        nav ul li {
+            display: inline;
+        }
+        nav button {
+            background-color: transparent;
+            color: rgb(200, 120, 15);
+            border: 2px solid rgb(200, 120, 15);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        nav button:hover {
+            background-color: rgb(200, 120, 15); 
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <div class="user-info" style="color: rgb(226, 226, 226);;">
+                <p style="text-align: left;">Connecté en tant que : <br><span class="email" id="userEmail">Chargement...</span></p>
+            </div>
+            <li><button onclick="window.location.href='dashboard.html'">Accueil</button></li>
+            <li><button onclick="window.location.href='casier.html'">Casier Judiciaire</button></li>
+            <li><button onclick="window.location.href='incident.html'">Incident</button></li>
+            <li><button onclick="window.location.href='formation.html'">Formation</button></li>
+            <li><button onclick="window.location.href='agenda.html'">Agenda</button></li>
+            <li><button onclick="window.seDeconnecter()">Se déconnecter</button></li>
+        </ul>
+    </nav>
+    <main>
+    <br>
+    <h1>Intranet der Feldgendarmerie</h1>
+    <h3>🥖 Labaguette Military Roleplay.</h3>
+    <br>
+    <div style="text-align:center; margin-top:40px;">
+    <h4 for="docSelect">Choisir un document :</h4>
+    <br>
+    <select id="docSelect" style="padding:10px; font-size:16px; margin-left:10px; color: rgb(226, 226, 226); background-color: rgb(53, 53, 53);">
+        <option value="">-- Sélectionner --</option>
+        <option value="https://docs.google.com/document/d/1sh3f8gLMe2WIP5gxR147gx3oaSOHT8Q-docMDhMGwRU/preview">Réglementation Interne</option>
+        <option value="https://docs.google.com/spreadsheets/d/18VgqXxCvmm1jzHysYPfBBlJ6AN_EfDYuWQHRsakp6EE/preview">Code de Pocédure Judiciaire</option>
+        <option value="https://docs.google.com/document/d/1yf5eqiITKD4Bn77ZNV8Cjt15XbDSYNa8L4tKV0HvU_0/preview">Escalade de Sanction</option>
+        <option value="https://docs.google.com/document/d/1FAZEpWk_yrMoo8JQLbR8bBix31jhCXG_PdqJ45EQypk/preview">Escorte de VIP</option>
+        <option value="https://docs.google.com/document/d/1JbTxNIW6-KMr4KMxrGjTml-X2wVycVjJQjVX-K05rE0/preview">Gestion de Priosnnier</option>
+        <option value="https://docs.google.com/document/d/1BvVSwzAsZTiD8dJAhcKuIlRFoNftzWzlyG4RstrRA2E/preview">Manuel de Formation</option>
+        <option value="https://docs.google.com/document/d/1CCzczMGQXfD-4-wWlCR06_8lgLDAiYypWXlVg2yPuQ0/preview">Tenue HDR</option>
+        <option value="https://docs.google.com/document/d/1f9-MmMWxFtACd6AbIIrDmwvfTnUjHvGu4wKyr9QNXhQ/preview">Tenue SO</option>
+        <option value="https://docs.google.com/document/d/1RxgjbfTOIDw_m1naHrkQTHFlCzAYNSM5RrZQsC9Ix4Q/preview">Tenue OFF</option>
+    </select>
+    </div>
+
+    <div id="viewerContainer" style="width:100%; max-width:1000px; margin:40px auto; display:none;">
+    <iframe 
+        id="docViewer"
+        src=""
+        width="100%"
+        height="800px"
+        style="border:1px solid #ccc; border-radius:8px;">
+    </iframe>
+    </div>
+
+
+    </main>
+    <footer>
+        <br>
+        <h4>2026 - Fait par goodging33_dev / STUGART Alphons.</h4>
+        <br>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="protection.js"></script>
+    <script src="documentation.js"></script>
+</body>
+</html>

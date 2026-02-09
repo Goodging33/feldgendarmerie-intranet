@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang=”fr”>
+<head>
+    <meta charset="UTF-8">
+    <title>🟠 - Intranet Feldgendarmerie</title>
+    <style>
+        body {
+            background-color: rgb(37, 37, 37);
+            text-align: center;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1;
+        }
+        h1 {
+            color: rgb(245, 147, 20)
+        }
+        h4 {
+            color: rgb(226, 226, 226)
+        }
+        h3 {
+            color: rgb(47, 117, 47)
+        }
+        input[type="email"] {
+            background-color: rgb(65, 65, 65);
+            border-color: rgb(56, 56, 56);
+            border-radius: 12px;
+            padding: 10px;
+            margin: 10px;
+            width: 350px;
+            color: rgb(240, 240, 240)
+        }
+        input[type="password"] {
+            background-color: rgb(65, 65, 65);
+            border-color: rgb(56, 56, 56);
+            border-radius: 12px;
+            padding: 10px;
+            margin: 10px;
+            width: 350px;
+            color: rgb(240, 240, 240)
+        }
+        button {
+            border-radius: 12px;
+            background-color: rgb(245, 147, 20);
+            color: rgb(37, 37, 37);
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            width: 250px;
+        }
+        footer {
+            background-color: rgb(53, 53, 53);
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <main>
+    <h1>Intranet der Feldgendarmerie</h1>
+    <h3>🥖 Labaguette Military Roleplay.</h3>
+    <br>
+    <h4>Veuillez vous connecter pour accéder à l'intranet.</h4>
+    <input type="email" placeholder="Adresse e-mail">
+    <br>
+    <input type="password" placeholder="Mot de passe">
+    <br>
+    <button>Se connecter</button>
+    <br>
+    <button style="background-color: rgba(255, 255, 255, 0);color: aliceblue;" id="motDePasseOublie"><em>Mot de passe oublié?</em></button>
+    <p id="messageOubli" style="color: rgb(245, 147, 20); display: none; margin-top: 20px;">
+    🦺 - Veuillez contacter STUGART Alphons pour pouvoir récupérer vos identifiants.
+    </p>
+    <p id="messageCorrect" style="color: rgb(245, 147, 20); display: none; margin-top: 20px;">
+    ✅ - Connexion réussis.
+    </p>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>    
+    <script src="config.js"></script>
+    <script src="accueil.js"></script>
+    </main>
+    <footer>
+        <h4>2026 - Fait par goodging33_dev / STUGART Alphons.</h4>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang=”fr”>
+<head>
+    <meta charset="UTF-8">
+    <title>🟠 - Dashboard Feldgendarmerie</title>
+    <style>
+        body {
+            background-color: rgb(37, 37, 37);
+            text-align: center;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1;
+        }
+        h1 {
+            color: rgb(245, 147, 20)
+        }
+        h4 {
+            color: rgb(226, 226, 226)
+        }
+        h3 {
+            color: rgb(47, 117, 47)
+        }
+        button {
+            border-radius: 12px;
+            background-color: rgb(245, 147, 20);
+            color: rgb(37, 37, 37);
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            width: 250px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: rgb(200, 120, 15); 
+        }
+        #btnAdmin {
+            background-color: rgb(145, 61, 61);
+        }
+
+        #btnAdmin:hover {
+            background-color: rgb(110, 45, 45); /* Rouge plus sombre */
+        }
+        footer {
+            background-color: rgb(53, 53, 53);
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <main>
+    <h1>Intranet der Feldgendarmerie</h1>
+    <h3>🥖 Labaguette Military Roleplay.</h3>
+    <br>
+    <div class="user-info" style="color: rgb(226, 226, 226);">
+        <p>Connecté en tant que : <span class="email" id="userEmail">Chargement...</span></p>
+    </div>
+    <button id="btnCasier" onclick="window.location.href='casier.html'">Casier Judiciaire</button>
+    <br>
+    <br>
+    <button id="btnDocumentation" onclick="window.location.href='documentation.html'">Documentation Interne</button>
+    <br>
+    <br>
+    <button id="btnIncident" onclick="window.location.href='incident.html'">Rapport d'Indident</button>
+    <br>
+    <br>
+    <button id="btnFormation" onclick="window.location.href='formation.html'">Cellule de Formation</button>
+    <br>
+    <br>
+    <button id="btnAgenda" onclick="window.location.href='agenda.html'">Agenda</button>
+    <br>
+    <br>
+    <button onclick="window.seDeconnecter()">Se déconnecter</button>
+    <br>
+    <br>
+    <br>
+    <br>
+    <button id="btnAdmin" onclick="window.location.href='admin.html'" style="background-color: rgb(145, 61, 61)">Panel Administrateur</button>
+    </main>
+    <footer>
+        <h4>2026 - Fait par goodging33_dev / STUGART Alphons.</h4>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="protection.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
