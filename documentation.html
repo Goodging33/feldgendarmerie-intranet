@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>🟠 - Intranet Feldgendarmerie</title>
+    <style>
+        body {
+            background-color: rgb(37, 37, 37);
+            text-align: center;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        main {
+            flex: 1;
+        }
+        h1 {
+            color: rgb(245, 147, 20)
+        }
+        h4 {
+            color: rgb(226, 226, 226)
+        }
+        h3 {
+            color: rgb(47, 117, 47)
+        }
+        button {
+            border-radius: 12px;
+            background-color: rgb(245, 147, 20);
+            color: rgb(37, 37, 37);
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            width: 250px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 0 rgba(245, 147, 20, 0);
+        }
+        button:hover {
+            box-shadow: 0 0 20px rgba(245, 147, 20, 0.8),
+                        0 0 40px rgba(245, 147, 20, 0.6), 
+                        0 0 60px rgba(245, 147, 20, 0.4); 
+            transform: translateY(-2px);
+        }
+        footer {
+            background-color: rgb(53, 53, 53);
+            color: white;
+            text-align: center;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        nav {
+            background-color: rgb(53, 53, 53);
+            padding: 15px 0;
+            top: 0;
+            width: 100%;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        nav ul li {
+            display: inline;
+        }
+        nav button {
+            background-color: transparent;
+            color: rgb(200, 120, 15);
+            border: 2px solid rgb(200, 120, 15);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+            width: auto;
+        }
+        nav button:hover {
+            background-color: rgb(200, 120, 15); 
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <nav>
+        <ul>
+            <div class="user-info" style="color: rgb(226, 226, 226);;">
+                <p style="text-align: left;">Connecté en tant que : <br><span class="email" id="userEmail">Chargement...</span></p>
+            </div>
+            <li><button onclick="window.location.href='dashboard.html'">Accueil</button></li>
+            <li><button onclick="window.location.href='casier.html'">Casier Judiciaire</button></li>
+            <li><button onclick="window.location.href='incident.html'">Incident</button></li>
+            <li><button onclick="window.location.href='formation.html'">Formation</button></li>
+            <li><button onclick="window.location.href='pds.html'">PDS</button></li>
+            <li><button onclick="window.location.href='agenda.html'">Agenda</button></li>
+            <li><button onclick="window.seDeconnecter()">Se déconnecter</button></li>
+        </ul>
+    </nav>
+    <main>
+    <br>
+    <h1>Intranet der Feldgendarmerie</h1>
+    <h3>🥖 Labaguette Military Roleplay.</h3>
+    <br>
+    <div style="text-align:center; margin-top:40px;">
+    <h4 for="docSelect">Choisir un document :</h4>
+    <br>
+    <select id="docSelect" style="padding:10px; font-size:16px; margin-left:10px; color: rgb(226, 226, 226); background-color: rgb(53, 53, 53);">
+        <option value="">-- Sélectionner --</option>
+        <option value="https://docs.google.com/document/d/1sh3f8gLMe2WIP5gxR147gx3oaSOHT8Q-docMDhMGwRU/preview">Réglementation Interne</option>
+        <option value="https://docs.google.com/spreadsheets/d/18VgqXxCvmm1jzHysYPfBBlJ6AN_EfDYuWQHRsakp6EE/preview">Code de Pocédure Judiciaire</option>
+        <option value="https://docs.google.com/document/d/1yf5eqiITKD4Bn77ZNV8Cjt15XbDSYNa8L4tKV0HvU_0/preview">Escalade de Sanction</option>
+        <option value="https://docs.google.com/document/d/1FAZEpWk_yrMoo8JQLbR8bBix31jhCXG_PdqJ45EQypk/preview">Escorte de VIP</option>
+        <option value="https://docs.google.com/document/d/1JbTxNIW6-KMr4KMxrGjTml-X2wVycVjJQjVX-K05rE0/preview">Gestion de Priosnnier</option>
+        <option value="https://docs.google.com/document/d/1BvVSwzAsZTiD8dJAhcKuIlRFoNftzWzlyG4RstrRA2E/preview">Manuel de Formation</option>
+        <option value="https://docs.google.com/document/d/1CCzczMGQXfD-4-wWlCR06_8lgLDAiYypWXlVg2yPuQ0/preview">Tenue HDR</option>
+        <option value="https://docs.google.com/document/d/1f9-MmMWxFtACd6AbIIrDmwvfTnUjHvGu4wKyr9QNXhQ/preview">Tenue SO</option>
+        <option value="https://docs.google.com/document/d/1RxgjbfTOIDw_m1naHrkQTHFlCzAYNSM5RrZQsC9Ix4Q/preview">Tenue OFF</option>
+    </select>
+    </div>
+
+    <div id="viewerContainer" style="width:100%; max-width:1000px; margin:40px auto; display:none;">
+    <iframe 
+        id="docViewer"
+        src=""
+        width="100%"
+        height="800px"
+        style="border:1px solid #ccc; border-radius:8px;">
+    </iframe>
+    </div>
+
+
+    </main>
+    <footer>
+        <br>
+        <h4>© 2026 - Fait par goodging33_dev / STUGART Alphons.  -  Version 1.2.2</h4>
+        <br>
+    </footer>
+        <script>
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            ctx.scale(dpr, dpr);
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const particles = [];
+        const particleCount = 200;
+        const maxDistance = 150;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * window.innerWidth;
+                this.y = Math.random() * window.innerHeight;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > window.innerWidth) this.vx *= -1;
+                if (this.y < 0 || this.y > window.innerHeight) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = 'rgba(255, 140, 50, 0.8)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        const opacity = (1 - distance / maxDistance) * 0.5;
+                        ctx.strokeStyle = `rgba(255, 120, 40, ${opacity})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            connectParticles();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+    <script src="update-popup.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="protection.js"></script>
+    <script src="documentation.js"></script>
+</body>
+</html>

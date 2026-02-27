@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>🟠 - Intranet Feldgendarmerie</title>
+    <style>
+        body {
+            background-color: rgb(37, 37, 37);
+            text-align: center;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+        h1 {
+            color: rgb(245, 147, 20)
+        }
+        h4 {
+            color: rgb(226, 226, 226)
+        }
+        h3 {
+            color: rgb(47, 117, 47)
+        }
+        button {
+            border-radius: 12px;
+            background-color: rgb(245, 147, 20);
+            color: rgb(37, 37, 37);
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            width: 250px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 0 rgba(245, 147, 20, 0);
+        }
+        button:hover {
+            box-shadow: 0 0 20px rgba(245, 147, 20, 0.8),
+                        0 0 40px rgba(245, 147, 20, 0.6), 
+                        0 0 60px rgba(245, 147, 20, 0.4); 
+            transform: translateY(-2px);
+        }
+        footer {
+            background-color: rgb(53, 53, 53);
+            color: white;
+            text-align: center;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        nav {
+            background-color: rgb(53, 53, 53);
+            padding: 15px 0;
+            top: 0;
+            width: 100%;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        nav ul li {
+            display: inline;
+        }
+        nav button {
+            background-color: transparent;
+            color: rgb(200, 120, 15);
+            border: 2px solid rgb(200, 120, 15);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+            width: auto;
+        }
+        nav button:hover {
+            background-color: rgb(200, 120, 15); 
+            color: #333;
+        }
+
+        /* Styles pour l'agenda */
+        .agenda-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .calendar-section {
+            flex: 2;
+            background-color: rgb(53, 53, 53);
+            padding: 20px;
+            border: 3px solid black;
+            border-radius: 12px;
+        }
+
+        .events-section {
+            flex: 1;
+            background-color: rgb(53, 53, 53);
+            border-radius: 12px;
+            padding: 20px;
+            max-height: 800px;
+            overflow-y: auto;
+            border: 3px solid black;
+            border-radius: 12px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            color: rgb(226, 226, 226);
+        }
+
+        .calendar-header h2 {
+            color: rgb(245, 147, 20);
+            font-size: 24px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-nav button {
+            width: auto;
+            padding: 8px 16px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 20px;
+        }
+
+        .calendar-day-header {
+            background-color: rgb(200, 120, 15);
+            color: rgb(37, 37, 37);
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+
+        .calendar-day {
+            background-color: rgb(63, 63, 63);
+            min-height: 100px;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background-color: rgb(73, 73, 73);
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.4;
+        }
+
+        .calendar-day.today {
+            border: 2px solid rgb(245, 147, 20);
+        }
+
+        .calendar-day-number {
+            color: rgb(226, 226, 226);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .calendar-event {
+            background-color: rgb(200, 120, 15);
+            color: rgb(37, 37, 37);
+            padding: 3px 6px;
+            margin-top: 3px;
+            border-radius: 4px;
+            font-size: 11px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .calendar-event:hover {
+            opacity: 0.8;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background-color: rgb(53, 53, 53);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            color: rgb(226, 226, 226);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: rgb(245, 147, 20);
+        }
+
+        .close {
+            color: rgb(226, 226, 226);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: auto;
+            padding: 0;
+        }
+
+        .close:hover {
+            color: rgb(245, 147, 20);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: rgb(226, 226, 226);
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid rgb(200, 120, 15);
+            background-color: rgb(63, 63, 63);
+            color: rgb(226, 226, 226);
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn-primary {
+            background-color: rgb(200, 120, 15);
+            color: rgb(37, 37, 37);
+        }
+
+        .btn-secondary {
+            background-color: rgb(100, 100, 100);
+            color: rgb(226, 226, 226);
+        }
+
+        .btn-danger {
+            background-color: rgb(180, 50, 50);
+            color: white;
+        }
+
+        .event-list-item {
+            background-color: rgb(63, 63, 63);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border-left: 4px solid rgb(200, 120, 15);
+        }
+
+        .event-list-item:hover {
+            background-color: rgb(73, 73, 73);
+        }
+
+        .event-list-item h4 {
+            color: rgb(245, 147, 20);
+            margin-bottom: 5px;
+        }
+
+        .event-list-item p {
+            color: rgb(200, 200, 200);
+            font-size: 13px;
+            margin: 3px 0;
+        }
+
+        .add-event-btn {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .warning-overlap {
+            background-color: rgba(180, 50, 50, 0.2);
+            border: 2px solid rgb(180, 50, 50);
+            padding: 10px;
+            border-radius: 8px;
+            color: rgb(255, 150, 150);
+            margin-bottom: 15px;
+        }
+
+        .events-section h3 {
+            color: rgb(245, 147, 20);
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <nav>
+        <ul>
+            <div class="user-info" style="color: rgb(226, 226, 226);">
+                <p style="text-align: left;">Connecté en tant que : <br><span class="email" id="userEmail">Chargement...</span></p>
+            </div>
+            <li><button onclick="window.location.href='dashboard.html'">Accueil</button></li>
+            <li><button onclick="window.location.href='casier.html'">Casier Judiciaire</button></li>
+            <li><button onclick="window.location.href='documentation.html'">Documentation</button></li>
+            <li><button onclick="window.location.href='incident.html'">Incident</button></li>
+            <li><button onclick="window.location.href='formation.html'">Formation</button></li>
+            <li><button onclick="window.location.href='pds.html'">PDS</button></li>
+            <li><button onclick="window.seDeconnecter()">Se déconnecter</button></li>
+        </ul>
+    </nav>
+    <main>
+        <br>
+        <h1>Agenda Interne</h1>
+        <h3>🥖 Labaguette Military Roleplay.</h3>
+        <br>
+
+        <div class="agenda-container">
+            <!-- Calendrier -->
+            <div class="calendar-section">
+                <div class="calendar-header">
+                    <h2 id="currentMonth">Janvier 2026</h2>
+                    <div class="calendar-nav">
+                        <button id="prevMonth">◀ Précédent</button>
+                        <button id="todayBtn">Aujourd'hui</button>
+                        <button id="nextMonth">Suivant ▶</button>
+                    </div>
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Généré par JavaScript -->
+                </div>
+            </div>
+
+            <!-- Liste des événements -->
+            <div class="events-section">
+                <h3>Événements à venir :</h3>
+                <div id="eventsList">
+                    <!-- Généré par JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Détails d'événement (lecture seule) -->
+        <div id="eventModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Détails de l'événement</h2>
+                    <span class="close" id="closeModal">&times;</span>
+                </div>
+                <form id="eventForm">
+                    <div class="form-group">
+                        <label for="eventTitle">Titre</label>
+                        <input type="text" id="eventTitle" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventDescription">Description</label>
+                        <textarea id="eventDescription" readonly></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventStart">Date et heure de début</label>
+                        <input type="datetime-local" id="eventStart" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventEnd">Date et heure de fin</label>
+                        <input type="datetime-local" id="eventEnd" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventColor">Couleur</label>
+                        <select id="eventColor" disabled>
+                            <option value="#f59314">🟠 Orange</option>
+                            <option value="#2f752f">🟢 Vert</option>
+                            <option value="#4169e1">🔵 Bleu</option>
+                            <option value="#dc143c">🔴 Rouge</option>
+                            <option value="#9370db">🟣 Violet</option>
+                            <option value="#ffd700">🟡 Jaune</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="document.getElementById('eventModal').style.display='none'">Fermer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <br>
+        <h4>© 2026 - Fait par goodging33_dev / STUGART Alphons.  -  Version 1.2.2</h4>
+        <br>
+    </footer>
+        <script>
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            ctx.scale(dpr, dpr);
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const particles = [];
+        const particleCount = 200;
+        const maxDistance = 150;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * window.innerWidth;
+                this.y = Math.random() * window.innerHeight;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > window.innerWidth) this.vx *= -1;
+                if (this.y < 0 || this.y > window.innerHeight) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = 'rgba(255, 140, 50, 0.8)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        const opacity = (1 - distance / maxDistance) * 0.5;
+                        ctx.strokeStyle = `rgba(255, 120, 40, ${opacity})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            connectParticles();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+    <script src="update-popup.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="protection.js"></script>
+    <script src="agenda.js"></script>
+</body>
+</html>

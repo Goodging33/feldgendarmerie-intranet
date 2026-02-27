@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🟠 - Intranet Feldgendarmerie</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: rgb(37, 37, 37);
+            text-align: center;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+        h1 {
+            color: rgb(245, 147, 20);
+            margin-bottom: 5px;
+        }
+        h4 {
+            color: rgb(226, 226, 226);
+        }
+        h3 {
+            color: rgb(47, 117, 47);
+            margin-bottom: 20px;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .section {
+            background-color: rgb(53, 53, 53);
+            border: 3px solid black;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .left-section {
+            flex: 1;
+            text-align: left;
+        }
+        .right-section {
+            flex: 0 0 400px;
+        }
+        .section-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: rgb(226, 226, 226);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid black;
+            font-size: 14px;
+            border-radius: 8px;
+            background-color: rgb(37, 37, 37);
+            color: rgb(226, 226, 226);
+        }
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .points-section {
+            margin-top: 20px;
+        }
+        .points-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: left;
+            color: rgb(226, 226, 226);
+        }
+        .point-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: rgb(226, 226, 226);
+        }
+        .point-label {
+            flex: 1;
+            text-align: left;
+            color: rgb(226, 226, 226);
+        }
+        .point-score {
+            font-weight: bold;
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .point-input {
+            width: 50px;
+            padding: 4px;
+            border: 2px solid black;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: rgb(226, 226, 226);
+        }
+        .point-input:focus {
+            outline: none;
+            border-color: #333;
+        }
+        .comment-group {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+        .comment-group h4 {
+            margin: 0;
+        }
+        .comment-group label {
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .total-box {
+            display: inline-block;
+            background-color: rgb(37, 37, 37);
+            border: 2px solid black;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: rgb(226, 226, 226);
+        }
+        .comment-group textarea {
+            clear: both;
+            margin-top: 5px;
+        }
+        .recrues-box {
+            border: 3px solid black;
+            min-height: 200px;
+            margin-bottom: 20px;
+            padding: 15px;
+            overflow-y: auto;
+            max-height: 300px;
+            text-align: left;
+            border-radius: 8px;
+        }
+        .formation-box {
+            border: 3px solid black;
+            min-height: 200px;
+            margin-bottom: 10px;
+            padding: 15px;
+            overflow-y: auto;
+            max-height: 300px;
+            text-align: left;
+            border-radius: 8px;
+        }
+        .scroll-note {
+            color: #666;
+            font-size: 12px;
+            font-style: italic;
+            margin-top: 5px;
+            text-align: left;
+        }
+        .dropdown-container {
+            position: relative;
+        }
+        button {
+            border-radius: 12px;
+            background-color: rgb(245, 147, 20);
+            color: rgb(37, 37, 37);
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            width: 250px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 0 rgba(245, 147, 20, 0);
+        }
+
+        button:hover {
+            box-shadow: 0 0 20px rgba(245, 147, 20, 0.8),
+                        0 0 40px rgba(245, 147, 20, 0.6), 
+                        0 0 60px rgba(245, 147, 20, 0.4); 
+            transform: translateY(-2px);
+        }
+        .validate-button {
+            width: 100%;
+            margin-top: 20px;
+        }
+        footer {
+            background-color: rgb(53, 53, 53);
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+        }
+        nav {
+            background-color: rgb(53, 53, 53);
+            padding: 15px 20px;
+            top: 0;
+            width: 100%;
+        }
+        nav .nav-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            max-width: none;
+            margin: 0 auto;
+        }
+        .user-info {
+            color: rgb(226, 226, 226);
+            text-align: left;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        .user-info p {
+            line-height: 1.4;
+            font-weight: normal;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin: 0;
+        }
+        nav ul li {
+            display: inline;
+        }
+        nav button {
+            background-color: transparent;
+            color: rgb(200, 120, 15);
+            border: 2px solid rgb(200, 120, 15);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: normal;
+            transition: 0.3s;
+            width: auto;
+            white-space: nowrap;
+        }
+        nav button:hover {
+            background-color: rgb(200, 120, 15); 
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <nav>
+        <div class="nav-container">
+            <div class="user-info">
+                <p>Connecté en tant que :<br>alphons.stugart@feldgendarmerie.lbrp</p>
+            </div>
+            <ul>
+                <li><button onclick="window.location.href='dashboard.html'">Accueil</button></li>
+                <li><button onclick="window.location.href='casier.html'">Casier Judiciaire</button></li>
+                <li><button onclick="window.location.href='documentation.html'">Documentation</button></li>
+                <li><button onclick="window.location.href='incident.html'">Incident</button></li>
+                <li><button onclick="window.location.href='pds.html'">PDS</button></li>
+                <li><button onclick="window.location.href='agenda.html'">Agenda</button></li>
+                <li><button onclick="window.seDeconnecter()">Se déconnecter</button></li>
+            </ul>
+        </div>
+    </nav>
+    <main>
+        <br>
+        <h1>Gestion des formation</h1>
+        <h3>🥖 Labaguette Military Roleplay.</h3>
+        <div class="container">
+            <div class="section left-section">
+                <div class="section-title">📝 - Nouvelle Recrue</div>
+                <div class="form-group">
+                    <h4 for="nom_prenom">NOM Prénom du formé :</h4>
+                    <br>
+                    <input type="text" id="nom_prenom" name="nom_prenom">
+                </div>
+                <div class="form-group">
+                    <h4 for="steam_id">Steam_ID du formé :</h4>
+                    <br>
+                    <input type="text" id="steam_id" name="steam_id">
+                </div>
+                <div class="form-group">
+                    <h4 for="grade">Grade du formé :</h4>
+                    <br>
+                    <div class="dropdown-container">
+                        <select id="grade-mise" name="grade-mise">
+                            <option value="">Sélectionner un grade</option>
+                            <option value="Schütze">Schütze</option>
+                            <option value="Oberschütze">Oberschütze</option>
+                            <option value="Gefreiter">Gefreiter</option>
+                            <option value="Obergefreiter">Obergefreiter</option>
+                            <option value="Hauptgefreiter">Hauptgefreiter (marine)</option>
+                            <option value="Stabsgefreiter">Stabsgefreiter</option>
+                            <option value="Oberstabsgefreiter">Oberstabsgefreiter (marine)</option>
+                            <option value="Unteroffizer">Unteroffizer</option>
+                            <option value="Unterfeldwebel">Unterfeldwebel</option>
+                            <option value="Feldwebel">Feldwebel</option>
+                            <option value="Oberfeldwebel">Oberfeldwebel</option>
+                            <option value="Stabsfeldwebel">Stabsfeldwebel</option>
+                            <option value="Leutnant">Leutnant</option>
+                            <option value="Oberleutnant">Oberleutnant</option>
+                            <option value="Hauptmann">Hauptmann</option>
+                            <option value="Major">Major</option>
+                            <option value="Oberstleutnant">Oberstleutnant</option>
+                            <option value="Oberst">Oberst</option>
+                            <option value="Generalmajor">Generalleutnant</option>
+                            <option value="General der infanterie">General der infanterie</option>
+                            <option value="Generaloberst">Generaloberst</option>
+                            <option value="Generalfeldmarschall">Generalfeldmarschall</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="points-section">
+                    <div class="points-title">Points</div>
+                    <div class="point-item">
+                        <span class="point-label">I. Questions multiples sur la feldgendarmerie :</span>
+                        <span class="point-score"><input type="number" id="points1" name="points1" min="0" max="4" class="point-input" value="0">/4</span>
+                    </div>
+                    <div class="point-item">
+                        <span class="point-label">II. Capture et prise d'informations :</span>
+                        <span class="point-score"><input type="number" id="points2" name="points2" min="0" max="4" class="point-input" value="0">/4</span>
+                    </div>
+                    <div class="point-item">
+                        <span class="point-label">III. Gestion du maniérisme des effectifs allemands :</span>
+                        <span class="point-score"><input type="number" id="points3" name="points3" min="0" max="6" class="point-input" value="0">/6</span>
+                    </div>
+                    <div class="point-item">
+                        <span class="point-label">IV. Sécurisation de VIP :</span>
+                        <span class="point-score"><input type="number" id="points4" name="points4" min="0" max="2" class="point-input" value="0">/2</span>
+                    </div>
+                    <div class="point-item">
+                        <span class="point-label">V. Points libres :</span>
+                        <span class="point-score"><input type="number" id="points5" name="points5" min="0" max="2" class="point-input" value="0">/2</span>
+                    </div>
+                </div>
+                <div class="comment-group">
+                    <h4 for="commentaire">Commentaire du formateur :</h4>
+                    <textarea id="commentaire" name="commentaire"></textarea>
+                    <div class="total-box" id="total_points">0/20</div>
+                </div>
+                <button class="validate-button" onclick="valider()">Valider</button>
+            </div>
+            <div class="section right-section">
+                <div class="section-title">✅ - Formation réussie.</div>
+                <div class="recrues-box" id="recrues_box">
+                </div>
+                <div class="section-title" style="margin-top: 20px;">❌ - Formation ratée.</div>
+                <div class="formation-box" id="formation_rate_box">
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <h4>© 2026 - Fait par goodging33_dev / STUGART Alphons.  -  Version 1.2.2</h4>
+    </footer>
+    <script>
+        window.addEventListener('DOMContentLoaded', async () => {
+            await checkPageAccess('can_access_formation');
+        });
+    </script>
+        <script>
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            ctx.scale(dpr, dpr);
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const particles = [];
+        const particleCount = 200;
+        const maxDistance = 150;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * window.innerWidth;
+                this.y = Math.random() * window.innerHeight;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > window.innerWidth) this.vx *= -1;
+                if (this.y < 0 || this.y > window.innerHeight) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = 'rgba(255, 140, 50, 0.8)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        const opacity = (1 - distance / maxDistance) * 0.5;
+                        ctx.strokeStyle = `rgba(255, 120, 40, ${opacity})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            connectParticles();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+    <script src="update-popup.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="protection.js"></script>
+    <script src="formation.js"></script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🟠 - Détails du Ticket</title>
+    <style>
+        body {
+            background-color: rgb(37, 37, 37);
+            text-align: center;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        main {
+            flex: 1;
+            padding: 40px;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            color: rgb(226, 226, 226);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .ticket-section {
+            background-color: rgb(53, 53, 53);
+            border: 3px solid black;
+            padding: 40px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: rgb(245, 147, 20);
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin: 30px 0 20px 0;
+            font-weight: bold;
+            color: rgb(245, 147, 20);
+        }
+
+        .info-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: rgb(245, 147, 20);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            background-color: rgb(37, 37, 37);
+            padding: 12px;
+            border: 2px solid black;
+            border-radius: 4px;
+            color: rgb(226, 226, 226);
+        }
+
+        .statut-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .statut-en-attente {
+            background-color: rgb(255, 193, 7);
+            color: rgb(37, 37, 37);
+        }
+
+        .statut-en-cours {
+            background-color: rgb(33, 150, 243);
+            color: white;
+        }
+
+        .statut-resolu {
+            background-color: rgb(76, 175, 80);
+            color: white;
+        }
+
+        .statut-ferme {
+            background-color: rgb(158, 158, 158);
+            color: white;
+        }
+
+        button {
+            border-radius: 12px;
+            background-color: rgb(245, 147, 20);
+            color: rgb(37, 37, 37);
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            width: 250px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 0 rgba(245, 147, 20, 0);
+        }
+        button:hover {
+            box-shadow: 0 0 20px rgba(245, 147, 20, 0.8),
+                        0 0 40px rgba(245, 147, 20, 0.6), 
+                        0 0 60px rgba(245, 147, 20, 0.4); 
+            transform: translateY(-2px);
+        }
+
+        .contenu-zone {
+            background-color: rgb(37, 37, 37);
+            padding: 20px;
+            border: 2px solid black;
+            border-radius: 4px;
+            color: rgb(226, 226, 226);
+            text-align: left;
+            white-space: pre-wrap;
+            min-height: 150px;
+            line-height: 1.6;
+        }
+
+        footer {
+            background-color: rgb(53, 53, 53);
+            color: white;
+            text-align: center;
+        }
+
+        h4 {
+            color: rgb(226, 226, 226);
+        }
+
+        .ticket-id {
+            font-size: 14px;
+            color: rgb(158, 158, 158);
+            margin-top: 10px;
+        }
+
+        .date-info {
+            color: rgb(158, 158, 158);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .section-divider {
+            border-top: 2px solid rgb(245, 147, 20);
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <main>
+        <div class="container">
+            <div class="ticket-section">
+                <h1>Détails du Rapport d'Incident</h1>
+                
+                <div class="ticket-id">
+                    <strong>Numéro de ticket:</strong> <span id="ticket-id"></span>
+                </div>
+                
+                <div class="date-info">
+                    <strong>Date de création:</strong> <span id="date-creation"></span>
+                </div>
+
+                <div class="info-group">
+                    <span class="statut-badge" id="statut-badge"></span>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <h2>Auteur du rapport</h2>
+                
+                <div class="info-group">
+                    <span class="info-label">NOM Prénom (rp):</span>
+                    <div class="info-value" id="nom-auteur"></div>
+                </div>
+
+                <div class="info-group">
+                    <span class="info-label">Grade (rp):</span>
+                    <div class="info-value" id="grade-auteur"></div>
+                </div>
+
+                <div class="info-group">
+                    <span class="info-label">Régiment (rp):</span>
+                    <div class="info-value" id="regiment-auteur"></div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <h2>Personne mise en cause</h2>
+
+                <div class="info-group">
+                    <span class="info-label">NOM Prénom (rp):</span>
+                    <div class="info-value" id="nom-mise-en-cause"></div>
+                </div>
+
+                <div class="info-group">
+                    <span class="info-label">Grade (rp):</span>
+                    <div class="info-value" id="grade-mise-en-cause"></div>
+                </div>
+
+                <div class="info-group">
+                    <span class="info-label">Régiment (rp):</span>
+                    <div class="info-value" id="regiment-mise-en-cause"></div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <h2>Contenu du rapport</h2>
+
+                <div class="contenu-zone" id="contenu"></div>
+
+                <div style="margin-top: 40px;">
+                    <button onclick="window.location.href='extincident.html'">← Retour</button>
+                    <button onclick="imprimerTicket()">🖨️ Imprimer</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <br>
+        <h4>© 2026 - Fait par goodging33_dev / STUGART Alphons.  -  Version 1.2.2</h4>
+        <br>
+    </footer>
+        <script>
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            ctx.scale(dpr, dpr);
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const particles = [];
+        const particleCount = 200;
+        const maxDistance = 150;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * window.innerWidth;
+                this.y = Math.random() * window.innerHeight;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > window.innerWidth) this.vx *= -1;
+                if (this.y < 0 || this.y > window.innerHeight) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = 'rgba(255, 140, 50, 0.8)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        const opacity = (1 - distance / maxDistance) * 0.5;
+                        ctx.strokeStyle = `rgba(255, 120, 40, ${opacity})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            connectParticles();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script>
+        // Fonction pour formater la date
+        function formaterDate(dateISO) {
+            const date = new Date(dateISO);
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            };
+            return date.toLocaleDateString('fr-FR', options);
+        }
+
+        // Fonction pour obtenir l'ID depuis l'URL
+        function getTicketIdFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Fonction pour charger un ticket depuis Supabase
+        async function chargerTicketDepuisSupabase(ticketId) {
+            try {
+                const { data, error } = await window.supabaseClient
+                    .from('incidents')
+                    .select('*')
+                    .eq('ticket_id', ticketId)
+                    .single();
+
+                if (error) {
+                    console.error('Erreur Supabase:', error);
+                    alert('❌ Ticket non trouvé !');
+                    window.location.href = 'extincident.html';
+                    return null;
+                }
+
+                return data;
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('❌ Erreur lors du chargement du ticket');
+                window.location.href = 'extincident.html';
+                return null;
+            }
+        }
+
+        // Fonction pour afficher les détails du ticket
+        async function afficherTicket() {
+            // Vérifier si on a un ID dans l'URL
+            const ticketIdFromURL = getTicketIdFromURL();
+            
+            let ticket;
+
+            if (ticketIdFromURL) {
+                // Charger depuis Supabase avec l'ID de l'URL
+                ticket = await chargerTicketDepuisSupabase(ticketIdFromURL);
+                if (!ticket) return;
+            } else {
+                // Sinon, utiliser localStorage (comportement original)
+                const ticketDataJSON = localStorage.getItem('ticketData');
+                
+                if (!ticketDataJSON) {
+                    alert('❌ Aucune donnée de ticket trouvée !');
+                    window.location.href = 'extincident.html';
+                    return;
+                }
+
+                ticket = JSON.parse(ticketDataJSON);
+            }
+
+            // Affichage des informations
+            document.getElementById('ticket-id').textContent = ticket.ticket_id;
+            document.getElementById('date-creation').textContent = formaterDate(ticket.date_creation);
+            
+            // Statut avec badge
+            const statutBadge = document.getElementById('statut-badge');
+            statutBadge.textContent = ticket.statut;
+            
+            // Couleur du badge selon le statut
+            switch(ticket.statut.toLowerCase()) {
+                case 'en attente':
+                    statutBadge.className = 'statut-badge statut-en-attente';
+                    break;
+                case 'traité d.a.a':
+                    statutBadge.className = 'statut-badge statut-en-cours';
+                    break;
+                case 'traité':
+                    statutBadge.className = 'statut-badge statut-resolu';
+                    break;
+                default:
+                    statutBadge.className = 'statut-badge statut-ferme';
+            }
+
+            // Informations de l'auteur
+            document.getElementById('nom-auteur').textContent = ticket.nom_prenom_auteur;
+            document.getElementById('grade-auteur').textContent = ticket.grade_auteur;
+            document.getElementById('regiment-auteur').textContent = ticket.regiment_auteur;
+
+            // Informations de la personne mise en cause
+            document.getElementById('nom-mise-en-cause').textContent = ticket.nom_prenom_mise_en_cause;
+            document.getElementById('grade-mise-en-cause').textContent = ticket.grade_mise_en_cause;
+            document.getElementById('regiment-mise-en-cause').textContent = ticket.regiment_mise_en_cause;
+
+            // Contenu
+            document.getElementById('contenu').textContent = ticket.contenu;
+        }
+
+        // Fonction pour imprimer le ticket
+        function imprimerTicket() {
+            window.print();
+        }
+
+        // Chargement des données au chargement de la page
+        document.addEventListener('DOMContentLoaded', afficherTicket);
+    </script>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>🟠 - Intranet Feldgendarmerie</title>
+    <style>
+        body {
+            background-color: rgb(37, 37, 37);
+            text-align: center;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+        h1 {
+            color: rgb(245, 147, 20)
+        }
+        h4 {
+            color: rgb(226, 226, 226)
+        }
+        h3 {
+            color: rgb(47, 117, 47)
+        }
+        button {
+            border-radius: 12px;
+            background-color: rgb(245, 147, 20);
+            color: rgb(37, 37, 37);
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            width: 250px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 0 rgba(245, 147, 20, 0);
+        }
+        button:hover {
+            box-shadow: 0 0 20px rgba(245, 147, 20, 0.8),
+                        0 0 40px rgba(245, 147, 20, 0.6), 
+                        0 0 60px rgba(245, 147, 20, 0.4); 
+            transform: translateY(-2px);
+        }
+        footer {
+            background-color: rgb(53, 53, 53);
+            color: white;
+            text-align: center;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .admin-section {
+            background-color: rgb(53, 53, 53);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 3px solid black;
+        }
+
+        .admin-section h2 {
+            color: rgb(245, 147, 20);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: rgb(226, 226, 226);
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid black;
+            background-color: rgb(63, 63, 63);
+            color: rgb(226, 226, 226);
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: rgb(200, 120, 15);
+            color: rgb(37, 37, 37);
+        }
+
+        .btn-secondary {
+            background-color: rgb(100, 100, 100);
+            color: rgb(226, 226, 226);
+        }
+
+        .btn-danger {
+            background-color: rgb(180, 50, 50);
+            color: white;
+        }
+
+        .events-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .events-table th {
+            background-color: rgb(200, 120, 15);
+            color: rgb(37, 37, 37);
+            padding: 12px;
+            text-align: left;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .events-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgb(63, 63, 63);
+            color: rgb(226, 226, 226);
+        }
+
+        .events-table tr:hover {
+            background-color: rgb(63, 63, 63);
+        }
+
+        .event-color-badge {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            vertical-align: middle;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            margin: 0 5px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            width: auto;
+        }
+
+        .action-btn.edit {
+            background-color: rgb(70, 130, 180);
+            color: white;
+        }
+
+        .action-btn.delete {
+            background-color: rgb(180, 50, 50);
+            color: white;
+        }
+
+        .warning-overlap {
+            background-color: rgba(180, 50, 50, 0.2);
+            border: 2px solid rgb(180, 50, 50);
+            padding: 10px;
+            border-radius: 8px;
+            color: rgb(255, 150, 150);
+            margin-bottom: 15px;
+        }
+
+        .success-message {
+            background-color: rgba(47, 117, 47, 0.2);
+            border: 2px solid rgb(47, 117, 47);
+            padding: 10px;
+            border-radius: 8px;
+            color: rgb(150, 255, 150);
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .search-filter input {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <main>
+        <br>
+        <h1>Panel Administrateur</h1>
+        <h3>🥖 - Labaguette Military Roleplay</h3>
+        <br>
+        <div class="admin-container">
+            <div class="admin-section">
+                <h2 id="formTitle">➕ Ajouter un événement</h2>
+                <div id="successMessage" class="success-message">
+                    ✅ Événement enregistré avec succès !
+                </div>
+                <div id="overlapWarning" class="warning-overlap" style="display: none;">
+                    Attention : Cet événement chevauche un autre événement existant !
+                </div>
+                <form id="eventForm">
+                    <input type="hidden" id="eventId">
+                    <div class="form-group">
+                        <label for="eventTitle">Titre de l'événement *</label>
+                        <input type="text" id="eventTitle" required maxlength="100" placeholder="Ex: Réunion stratégique">
+                    </div>
+                    <div class="form-group">
+                        <label for="eventDescription">Description</label>
+                        <textarea id="eventDescription" maxlength="500" placeholder="Détails de l'événement..."></textarea>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label for="eventStart">Date et heure de début *</label>
+                            <input type="datetime-local" id="eventStart" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventEnd">Date et heure de fin *</label>
+                            <input type="datetime-local" id="eventEnd" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventColor">Couleur de l'événement</label>
+                        <select id="eventColor">
+                            <option value="#f59314">🟠 Orange (défaut)</option>
+                            <option value="#2f752f">🟢 Vert</option>
+                            <option value="#4169e1">🔵 Bleu</option>
+                            <option value="#dc143c">🔴 Rouge</option>
+                            <option value="#9370db">🟣 Violet</option>
+                            <option value="#ffd700">🟡 Jaune</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">Enregistrer</button>
+                        <button type="button" class="btn-secondary" id="cancelBtn" style="display: none;">Annuler</button>
+                    </div>
+                </form>
+            </div>
+            <div class="admin-section">
+                <h2>📅 Tous les événements</h2>
+                <div class="search-filter">
+                    <input type="text" id="searchInput" placeholder="🔍 Rechercher un événement...">
+                    <select id="filterStatus">
+                        <option value="all">Tous les événements</option>
+                        <option value="upcoming">À venir</option>
+                        <option value="past">Passés</option>
+                        <option value="today">Aujourd'hui</option>
+                    </select>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="events-table">
+                        <thead>
+                            <tr>
+                                <th>Couleur</th>
+                                <th>Titre</th>
+                                <th>Date de début</th>
+                                <th>Date de fin</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="eventsTableBody">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 40px;">
+                                    Chargement des événements...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <br>
+            <button onclick="window.location.href='dashboard.html'">← Retour</button>
+        </div>
+    </main>
+    <footer>
+        <br>
+        <h4>© 2026 - Fait par goodging33_dev / STUGART Alphons.  -  Version 1.2.2</h4>
+        <br>
+    </footer>
+    <script>
+        window.addEventListener('DOMContentLoaded', async () => {
+            await checkPageAccess('is_admin');
+        });
+    </script>
+        <script>
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            ctx.scale(dpr, dpr);
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const particles = [];
+        const particleCount = 200;
+        const maxDistance = 150;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * window.innerWidth;
+                this.y = Math.random() * window.innerHeight;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > window.innerWidth) this.vx *= -1;
+                if (this.y < 0 || this.y > window.innerHeight) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = 'rgba(255, 140, 50, 0.8)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        const opacity = (1 - distance / maxDistance) * 0.5;
+                        ctx.strokeStyle = `rgba(255, 120, 40, ${opacity})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            connectParticles();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+    <script src="update-popup.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="protection.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

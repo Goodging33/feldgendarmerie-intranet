@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🟠 - Dépot Incidents</title>
+    <style>
+        body {
+            background-color: rgb(37, 37, 37);
+            text-align: center;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        main {
+            flex: 1;
+            padding: 40px;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            color: rgb(226, 226, 226);
+            display: flex;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .form-section {
+            background-color: rgb(53, 53, 53);
+            border: 3px solid black;
+            padding: 30px;
+            flex: 1;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            text-align: left;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid black;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            background-color: rgb(37, 37, 37);
+            color: rgb(226, 226, 226);
+        }
+
+        select {
+            background-color: rgb(37, 37, 37);
+            cursor: pointer;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        input {
+            background-color: rgb(37, 37, 37);
+            color: rgb(226, 226, 226);
+        }
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #333;
+            color: rgb(226, 226, 226);
+        }
+        h1 {
+            color: rgb(245, 147, 20)
+        }
+        h4 {
+            color: rgb(226, 226, 226)
+        }
+        button {
+            border-radius: 12px;
+            background-color: rgb(245, 147, 20);
+            color: rgb(37, 37, 37);
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            width: 250px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 0 rgba(245, 147, 20, 0);
+        }
+        button:hover {
+            box-shadow: 0 0 20px rgba(245, 147, 20, 0.8),
+                        0 0 40px rgba(245, 147, 20, 0.6), 
+                        0 0 60px rgba(245, 147, 20, 0.4); 
+            transform: translateY(-2px);
+        }
+        footer {
+            background-color: rgb(53, 53, 53);
+            color: white;
+            text-align: center;
+        }
+        #idperdu:hover {
+            box-shadow: none !important;
+            transform: none !important;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <main>
+    <div class="container">
+        <!-- Formulaire pour créer un nouveau rapport -->
+        <div class="form-section">
+            <h1>Faire un rapport d'incident</h1>
+            <br>
+            <h2>Vous :</h2>
+            <div class="form-group">
+                <label for="nom-prenom-auteur">NOM Prénom (rp) :</label>
+                <input type="text" id="nom-prenom-auteur" name="nom-prenom-auteur">
+            </div>
+
+            <div class="form-group">
+                <label for="grade-auteur">Grade (rp) :</label>
+                <select id="grade-auteur" name="grade-auteur">
+                    <option value="">Sélectionner un grade</option>
+                    <option value="Schütze">Schütze</option>
+                    <option value="Oberschütze">Oberschütze</option>
+                    <option value="Gefreiter">Gefreiter</option>
+                    <option value="Obergefreiter">Obergefreiter</option>
+                    <option value="Hauptgefreiter">Hauptgefreiter (marine)</option>
+                    <option value="Stabsgefreiter">Stabsgefreiter</option>
+                    <option value="Oberstabsgefreiter">Oberstabsgefreiter (marine)</option>
+                    <option value="Unteroffizer">Unteroffizer</option>
+                    <option value="Unterfeldwebel">Unterfeldwebel</option>
+                    <option value="Feldwebel">Feldwebel</option>
+                    <option value="Oberfeldwebel">Oberfeldwebel</option>
+                    <option value="Stabsfeldwebel">Stabsfeldwebel</option>
+                    <option value="Leutnant">Leutnant</option>
+                    <option value="Oberleutnant">Oberleutnant</option>
+                    <option value="Hauptmann">Hauptmann</option>
+                    <option value="Major">Major</option>
+                    <option value="Oberstleutnant">Oberstleutnant</option>
+                    <option value="Oberst">Oberst</option>
+                    <option value="Generalmajor">Generalleutnant</option>
+                    <option value="General der infanterie">General der infanterie</option>
+                    <option value="Generaloberst">Generaloberst</option>
+                    <option value="Generalfeldmarschall">Generalfeldmarschall</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="regiment-auteur">Régiment (rp) :</label>
+                <select id="regiment-auteur" name="regiment-auteur">
+                    <option value="">Sélectionner un régiment</option>
+                    <option value="916.Grenadier-Regiment">916.Grenadier-Regiment</option>
+                    <option value="916.Sanitäts-Abteilung">916.Sanitäts-Abteilung</option>
+                    <option value="009.Fallschirmjäger-Regiment">009.Fallschirmjäger-Regiment</option>
+                    <option value="001.Marine Pionier Bataillon">001.Marine Pionier Bataillon</option>
+                    <option value="919.Logistik-Abteilung">919.Logistik-Abteilung</option>
+                    <option value="130.Panzer Lehr Regiment">130.Panzer Lehr Regiment</option>
+                    <option value="254.Feldgendarmerie-Abteilung">254.Feldgendarmerie-Abteilung</option>
+                </select>
+            </div>
+            <h2>Mise en cause :</h2>
+            <div class="form-group">
+                <label for="nom-prenom-mise">NOM Prénom (rp) :</label>
+                <input type="text" id="nom-prenom-mise" name="nom-prenom-mise">
+            </div>
+
+            <div class="form-group">
+                <label for="grade-mise">Grade (rp) :</label>
+                <select id="grade-mise" name="grade-mise">
+                    <option value="">Sélectionner un grade</option>
+                    <option value="Schütze">Schütze</option>
+                    <option value="Oberschütze">Oberschütze</option>
+                    <option value="Gefreiter">Gefreiter</option>
+                    <option value="Obergefreiter">Obergefreiter</option>
+                    <option value="Hauptgefreiter">Hauptgefreiter (marine)</option>
+                    <option value="Stabsgefreiter">Stabsgefreiter</option>
+                    <option value="Oberstabsgefreiter">Oberstabsgefreiter (marine)</option>
+                    <option value="Unteroffizer">Unteroffizer</option>
+                    <option value="Unterfeldwebel">Unterfeldwebel</option>
+                    <option value="Feldwebel">Feldwebel</option>
+                    <option value="Oberfeldwebel">Oberfeldwebel</option>
+                    <option value="Stabsfeldwebel">Stabsfeldwebel</option>
+                    <option value="Leutnant">Leutnant</option>
+                    <option value="Oberleutnant">Oberleutnant</option>
+                    <option value="Hauptmann">Hauptmann</option>
+                    <option value="Major">Major</option>
+                    <option value="Oberstleutnant">Oberstleutnant</option>
+                    <option value="Oberst">Oberst</option>
+                    <option value="Generalmajor">Generalleutnant</option>
+                    <option value="General der infanterie">General der infanterie</option>
+                    <option value="Generaloberst">Generaloberst</option>
+                    <option value="Generalfeldmarschall">Generalfeldmarschall</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="regiment-mise">Régiment (rp) :</label>
+                <select id="regiment-mise" name="regiment-mise">
+                    <option value="">Sélectionner un régiment</option>
+                    <option value="916.Grenadier-Regiment">916.Grenadier-Regiment</option>
+                    <option value="916.Sanitäts-Abteilung">916.Sanitäts-Abteilung</option>
+                    <option value="009.Fallschirmjäger-Regiment">009.Fallschirmjäger-Regiment</option>
+                    <option value="001.Marine Pionier Bataillon">001.Marine Pionier Bataillon</option>
+                    <option value="919.Logistik-Abteilung">919.Logistik-Abteilung</option>
+                    <option value="130.Panzer Lehr Regiment">130.Panzer Lehr Regiment</option>
+                    <option value="254.Feldgendarmerie-Abteilung">254.Feldgendarmerie-Abteilung</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="contenue">Contenue :</label>
+                <textarea id="contenue" name="contenue"></textarea>
+            </div>
+            <button id="btnCréation">Poster ma demande.</button>
+        </div>
+
+        <!-- Formulaire pour rapport en cours -->
+        <div class="form-section">
+            <h1>Rapport déjà en cours?</h1>
+            <br>
+            <br>
+            <br>
+            <div class="form-group">
+                <label for="numero-ticket">Numéro de ticket?</label>
+                <input type="text" id="numero-ticket" name="numero-ticket">
+            </div>
+            <button id="btnRecherche">Rechercher ma demande.</button>
+            <br>
+            <button style="background-color: rgba(255, 255, 255, 0);color: aliceblue;" id="idperdu"><em>ID Perdu?</em></button>
+            <p id="messageOubli" style="color: rgb(245, 147, 20); display: none; margin-top: 20px;">🦺 - Veuillez contacter STUGART Alphons pour pouvoir récupérer vos ID.</p>
+        </div>
+    </div>
+    </main>
+    <footer>
+        <br>
+        <h4>© 2026 - Fait par goodging33_dev / STUGART Alphons.  -  Version 1.2.2</h4>
+        <br>
+    </footer>
+        <script>
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            ctx.scale(dpr, dpr);
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const particles = [];
+        const particleCount = 200;
+        const maxDistance = 150;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * window.innerWidth;
+                this.y = Math.random() * window.innerHeight;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > window.innerWidth) this.vx *= -1;
+                if (this.y < 0 || this.y > window.innerHeight) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = 'rgba(255, 140, 50, 0.8)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        const opacity = (1 - distance / maxDistance) * 0.5;
+                        ctx.strokeStyle = `rgba(255, 120, 40, ${opacity})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            connectParticles();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="extincident.js"></script>
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>🟠 - Intranet Feldgendarmerie</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+        .container {
+          display: flex;
+          gap: 20px;
+          align-items: flex-start;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+        .card {
+          background-color: rgb(53, 53, 53);
+          border-radius: 8px;
+          padding: 20px;
+          width: 650px;
+        }
+        .card h2 {
+          margin-top: 0;
+          margin-bottom: 15px;
+          text-align: center;
+        }
+        .form-group {
+          margin-bottom: 12px;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          text-align: left;
+        }
+        label {
+            color: white;
+        }
+        input[type="text"],
+        select,
+        textarea {
+          background-color: rgb(37, 37, 37);
+          border: 1px solid black;
+          border-radius: 4px;
+          padding: 6px 8px;
+          color: #fff;
+          font-size: 0.9rem;
+        }
+        textarea {
+          min-height: 70px;
+          resize: vertical;
+        }
+        body {
+            background-color: rgb(37, 37, 37);
+            text-align: center;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        main {
+            flex: 1;
+        }
+        h1 {
+            color: rgb(245, 147, 20)
+        }
+        h2 {
+            color: rgb(226, 226, 226)
+        }
+        h3 {
+            color: rgb(47, 117, 47)
+        }
+        button {
+            border-radius: 12px;
+            background-color: rgb(245, 147, 20);
+            color: rgb(37, 37, 37);
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            width: 250px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 0 rgba(245, 147, 20, 0);
+        }
+        button:hover {
+            box-shadow: 0 0 20px rgba(245, 147, 20, 0.8),
+                        0 0 40px rgba(245, 147, 20, 0.6), 
+                        0 0 60px rgba(245, 147, 20, 0.4); 
+            transform: translateY(-2px);
+        }
+        footer {
+            background-color: rgb(53, 53, 53);
+            color: white;
+            text-align: center;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        nav {
+            background-color: rgb(53, 53, 53);
+            padding: 4px 0;
+            top: 0;
+            width: 100%;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        nav ul li {
+            display: inline;
+        }
+        nav button {
+            background-color: transparent;
+            color: rgb(200, 120, 15);
+            border: 2px solid rgb(200, 120, 15);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+            width: auto;
+        }
+        nav button:hover {
+            background-color: rgb(200, 120, 15); 
+            color: #333;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .col {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn-daa {
+            align-self: center; /* ou flex-start si tu veux */
+            width: 250px;
+        }
+        .result-card {
+          background-color: rgb(37, 37, 37);
+          border: 2px solid rgb(245, 147, 20);
+          padding: 15px;
+          margin-bottom: 15px;
+          border-radius: 6px;
+          color: white;
+        }
+        .result-card h3 {
+          margin-bottom: 8px;
+          color: rgb(245, 147, 20);
+        }
+        .result-card p {
+          margin: 3px 0;
+        }
+  </style>
+</head>
+<body>
+  <canvas id="particles-canvas"></canvas>
+    <nav>
+        <ul>
+            <div class="user-info" style="color: rgb(226, 226, 226);">
+                <p style="text-align: left;">Connecté en tant que : <br><span class="email" id="userEmail">Chargement...</span></p>
+            </div>
+            <li><button onclick="window.location.href='dashboard.html'">Accueil</button></li>
+            <li><button onclick="window.location.href='documentation.html'">Documentation</button></li>
+            <li><button onclick="window.location.href='incident.html'">Incident</button></li>
+            <li><button onclick="window.location.href='formation.html'">Formation</button></li>
+            <li><button onclick="window.location.href='pds.html'">PDS</button></li>
+            <li><button onclick="window.location.href='agenda.html'">Agenda</button></li>
+            <li><button onclick="window.seDeconnecter()">Se déconnecter</button></li>
+        </ul>
+    </nav>
+<main>
+    <br>
+    <h1>Gestion des sanctions</h1>
+    <h3>🥖 Labaguette Military Roleplay.</h3>
+    <br>
+    <br>
+<div class="container">
+
+  <div class="col">
+    <section class="card" id="ajouter-sanction">
+      <h2>MISE EN CAUSE</h2>
+
+      <form id="form-sanction">
+        <div class="form-group">
+          <label for="nom_rp">NOM Prénom :</label>
+          <input type="text" id="nom_rp" name="nom_rp">
+        </div>
+
+        <div class="form-group">
+            <label for="grade_rp">Grade :</label>
+            <select id="grade_rp" name="grade_rp">
+                <option value="">Sélectionner un grade</option>
+                <option value="Schütze">Schütze</option>
+                <option value="Oberschütze">Oberschütze</option>
+                <option value="Gefreiter">Gefreiter</option>
+                <option value="Obergefreiter">Obergefreiter</option>
+                <option value="Hauptgefreiter">Hauptgefreiter (marine)</option>
+                <option value="Stabsgefreiter">Stabsgefreiter</option>
+                <option value="Oberstabsgefreiter">Oberstabsgefreiter (marine)</option>
+                <option value="Unteroffizer">Unteroffizer</option>
+                <option value="Unterfeldwebel">Unterfeldwebel</option>
+                <option value="Feldwebel">Feldwebel</option>
+                <option value="Oberfeldwebel">Oberfeldwebel</option>
+                <option value="Stabsfeldwebel">Stabsfeldwebel</option>
+                <option value="Leutnant">Leutnant</option>
+                <option value="Oberleutnant">Oberleutnant</option>
+                <option value="Hauptmann">Hauptmann</option>
+                <option value="Major">Major</option>
+                <option value="Oberstleutnant">Oberstleutnant</option>
+                <option value="Oberst">Oberst</option>
+                <option value="Generalmajor">Generalleutnant</option>
+                <option value="General der infanterie">General der infanterie</option>
+                <option value="Generaloberst">Generaloberst</option>
+                <option value="Generalfeldmarschall">Generalfeldmarschall</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="regiment_rp">Régiment :</label>
+            <select id="regiment_rp" name="regiment_rp">
+                <option value="">Sélectionner un régiment</option>
+                <option value="916.Grenadier-Regiment">916.Grenadier-Regiment</option>
+                <option value="916.Sanitäts-Abteilung">916.Sanitäts-Abteilung</option>
+                <option value="009.Fallschirmjäger-Regiment">009.Fallschirmjäger-Regiment</option>
+                <option value="001.Marine Pionier Bataillon">001.Marine Pionier Bataillon</option>
+                <option value="919.Logistik-Abteilung">919.Logistik-Abteilung</option>
+                <option value="130.Panzer Lehr Regiment">130.Panzer Lehr Regiment</option>
+                <option value="254.Feldgendarmerie-Abteilung">254.Feldgendarmerie-Abteilung</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+          <label for="steam_id">Steam_ID</label>
+          <input type="text" id="steam_id" name="steam_id" placeholder="Ex : STEAM_0:0:000000000">
+        </div>
+
+        <div class="form-group">
+          <label for="infraction">Infraction retenue</label>
+          <select id="infraction" name="infraction" multiple>+
+            <option value="Observation unique. (0)">Observation unique. (0)</option>
+            <option value="Utilisation inutile ou incorrecte de l'équipement. (1)">Utilisation inutile ou incorrecte de l'équipement. (1)</option>
+            <option value="Vol. (1)">Vol. (1)</option>
+            <option value="Vocabulaire déplacé. (1)">Vocabulaire déplacé. (1)</option>
+            <option value="Oubli/Perte d'armes de fonction. (1)">Oubli/Perte d'armes de fonction. (1)</option>
+            <option value="Non respect de l'uniforme militaire. (1)">Non respect de l'uniforme militaire. (1)</option>
+            <option value="Ivresse. (1)">Ivresse. (1)</option>
+            <option value="Agression verbale. (1)">Agression verbale. (1)</option>
+            <option value="Manque de  respect à son supérieur. (1)">Manque de  respect à son supérieur. (1)</option>
+            <option value="Départ de la base sans accompagnement. (1)">Départ de la base sans accompagnement. (1)</option>
+            <option value="Couper les rangs. (1)">Couper les rangs. (1)</option>
+            <option value="Départ de la base sans autorisation / Forcer un barrage. (1)">Départ de la base sans autorisation / Forcer un barrage. (1)</option>
+            <option value="Mise en danger de la vie d'autrui. (1-3)">Mise en danger de la vie d'autrui. (1-3)</option>
+            <option value="Mauvais comportement. (1-3)">Mauvais comportement. (1-3)</option>
+            <option value="Refus d'obtempérer. (2)">Refus d'obtempérer. (2)</option>
+            <option value="Non délivrance d'un prisonnier aux autorités de police militaire. (2)">Non délivrance d'un prisonnier aux autorités de police militaire. (2)</option>
+            <option value="Abus de pouvoir. (2)">Abus de pouvoir. (2)</option>
+            <option value="Insubordination moyenne. (2)">Insubordination moyenne. (2)</option>
+            <option value="Degradation d'infrastructures. (2)">Degradation d'infrastructures. (2)</option>
+            <option value="Intrusion dans une zone militaire interdite / sensible. (2-3)">Intrusion dans une zone militaire interdite / sensible. (2-3)</option>
+            <option value="Manquement au respect envers un corps détaché. (2-4)">Manquement au respect envers un corps détaché. (2-4)</option>
+            <option value="Aggression sur la population civile. (3)">Aggression sur la population civile. (3)</option>
+            <option value="Manquement au respect de la hiérarchie. (3)">Manquement au respect de la hiérarchie. (3)</option>
+            <option value="Blessure volontaire sur un allié. (3)">Blessure volontaire sur un allié. (3)</option>
+            <option value="Meurtre d'un allié non vonlontaire. (3)">Meurtre d'un allié non vonlontaire. (3)</option>
+            <option value="Meurtre d'un allié. (4)">Meurtre d'un allié. (4)</option>
+            <option value="Insubordination grave. (4)">Insubordination grave. (4)</option>
+            <option value="Non soumission à une autorité de police militaire. (4)">Non soumission à une autorité de police militaire. (4)</option>
+            <option value="Non soumission à un ordre directe. (4-5)">Non soumission à un ordre directe. (4-5)</option>
+            <option value="Trahison. (5)">Trahison. (5)</option>
+            <option value="Désertion (5)">Désertion (5)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="explication">Explication des faits</label>
+          <textarea id="explication" name="explication" placeholder="Décrire les faits..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="sanction_appliquee">Sanction appliquée</label>
+          <textarea id="sanction_appliquee" name="sanction_appliquee" placeholder="Sanction appliquée..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="demande_sanction">Demande de sanction ?</label>
+          <select id="demande_sanction" name="demande_sanction">
+            <option value="non">Non</option>
+            <option value="oui">Oui</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="demande_sanction_texte">Si oui, préciser la demande</label>
+          <textarea id="demande_sanction_texte" name="demande_sanction_texte" placeholder="Texte de la demande de sanction..."></textarea>
+        </div>
+
+        <button id="btnAjouter">Ajouter</button>
+      </form>
+    </section>
+  </div>
+  <div class="col">
+    <section class="card" id="chercher-personne">
+      <h2>Chercher quelqu'un ?</h2>
+
+      <form id="form-recherche">
+        <div class="form-group">
+          <label for="search_steam_id">Steam_ID</label>
+          <input type="text" id="search_steam_id" name="search_steam_id" placeholder="Ex : STEAM_0:0:000000000">
+        </div>
+
+        <button id="btnChercher">Chercher</button>
+      </form>
+    </section>
+    <section class="card" id="resultats">
+      <h2>Résultats</h2>
+      <div id="zoneResultats"></div>
+    </section>
+
+    <br>
+    <br>
+    <button id="btnDAA" class="btn-daa">
+      Espace de Gestion.
+    </button>
+  </div>
+</div>
+  <br>
+  <br>
+</main>
+    <footer>
+        <br>
+        <h4>© 2026 - Fait par goodging33_dev / STUGART Alphons.  -  Version 1.2.2</h4>
+        <br>
+    </footer>
+        <script>
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            ctx.scale(dpr, dpr);
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const particles = [];
+        const particleCount = 200;
+        const maxDistance = 150;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * window.innerWidth;
+                this.y = Math.random() * window.innerHeight;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > window.innerWidth) this.vx *= -1;
+                if (this.y < 0 || this.y > window.innerHeight) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = 'rgba(255, 140, 50, 0.8)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        const opacity = (1 - distance / maxDistance) * 0.5;
+                        ctx.strokeStyle = `rgba(255, 120, 40, ${opacity})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            connectParticles();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+    <script src="update-popup.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="config.js"></script>
+    <script type="module" src="protection.js"></script>
+    <script type="module" src="casier.js"></script>
+</body>
+</html>
