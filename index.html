@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Connexion – Base Feldgendarmerie</title>
+  <style>
+    :root {
+      --bg: #0a0c0f;
+      --panel: #111418;
+      --accent: #ff7a1a; /* Orange militaire */
+      --accent-glow: rgba(255, 122, 26, 0.55);
+      --text-main: #f2f2f2;
+      --text-soft: #b5b5b5;
+      --border: #1c1f24;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #1a1d22 0, #0a0c0f 60%);
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-shell {
+      width: 100%;
+      max-width: 420px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 26px;
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.7),
+        0 12px 40px rgba(0, 0, 0, 0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, var(--accent-glow), transparent 70%);
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .header-title {
+      font-size: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .header-sub {
+      font-size: 12px;
+      color: var(--text-soft);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-soft);
+    }
+
+    input {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #0d0f12;
+      color: var(--text-main);
+      font-size: 14px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border: none;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #000;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.12s ease;
+    }
+
+    .btn:hover {
+      background: #ff8f3d;
+      transform: translateY(-1px);
+    }
+
+    .divider {
+      margin: 22px 0;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent 0,
+        rgba(255, 122, 26, 0.4) 20%,
+        rgba(255, 122, 26, 0.1) 60%,
+        transparent 100%
+      );
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-soft);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .status {
+      margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--accent);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+  </style>
+</head>
+<body>
+  <div class="login-shell">
+    <div class="header">
+      <div class="header-title">Base Feldgendarmerie</div>
+      <div class="header-sub">Authentification requise</div>
+    </div>
+
+    <form>
+      <div class="form-group">
+        <label for="identifiant">Identifiant</label>
+        <input type="text" id="identifiant" placeholder="Votre identifiant" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" placeholder="Votre mot de passe" />
+      </div>
+
+      <button class="btn" type="submit">Connexion</button>
+    </form>
+    <div class="divider"></div>
+    <div class="footer">
+        <div>Canal sécurisé</div>
+            <div class="status">
+                <span class="status-dot"></span>
+                <span>Actif</span>
+            </div>
+            <div style="
+                margin-top: 10px;
+                font-size: 10px;
+                color: var(--text-soft);
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                opacity: 0.8;
+            ">
+                *Ce site a un but roleplay et narratif, ne représentant pas la réalité.
+            </div>
+        </div>
+  </div>
+</body>
+    <script src="login.js"></script>
+</html>

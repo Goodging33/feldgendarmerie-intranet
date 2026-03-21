@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dépôt de Plainte — Feldgendarmerie</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:         #0a0b0e;
+      --panel:      #111318;
+      --panel-light:#161921;
+      --border:     rgba(255,255,255,0.07);
+      --accent:     #ff7a1a;
+      --accent2:    #e05e00;
+      --text-main:  #e8e6e0;
+      --text-soft:  #7a7870;
+      --red:        #ff4444;
+      --green:      #4ade80;
+      --yellow:     #f59e0b;
+      --purple:     #a78bfa;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: 'Barlow', sans-serif;
+      font-weight: 400;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Fond texture ── */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,122,26,0.18) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 30% at 50% 0%, rgba(255,122,26,0.08) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 64px 40px 40px;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.26em;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .hero-titre {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 8vw, 80px);
+      letter-spacing: 0.08em;
+      line-height: 0.9;
+      color: var(--text-main);
+      margin-bottom: 16px;
+    }
+
+    .hero-titre span { color: var(--accent); }
+
+    .hero-desc {
+      font-size: 14px;
+      color: var(--text-soft);
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.7;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── Tabs ── */
+    .tabs-container {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      padding: 0 40px 32px;
+    }
+
+    .tab-btn {
+      padding: 10px 28px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-soft);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn:hover { border-color: rgba(255,122,26,0.3); color: var(--text-main); }
+    .tab-btn.active { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 700; }
+
+    /* ── Main content ── */
+    .main {
+      position: relative;
+      z-index: 10;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── Panels ── */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── Formulaire ── */
+    .form-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .form-card-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,122,26,0.04);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .form-card-icon { font-size: 18px; }
+
+    .form-card-titre {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .form-card-desc {
+      font-size: 11px;
+      color: var(--text-soft);
+      margin-top: 2px;
+      letter-spacing: 0.06em;
+    }
+
+    .form-body {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-section {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .form-section-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-soft);
+      opacity: 0.6;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-row.single { grid-template-columns: 1fr; }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+    .form-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-soft);
+      font-weight: 600;
+    }
+
+    .form-label .req { color: var(--accent); margin-left: 3px; }
+
+    .form-input, .form-textarea, .form-select {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 14px;
+      color: var(--text-main);
+      font-size: 13px;
+      font-family: 'Barlow', sans-serif;
+      transition: border-color 0.2s, background 0.2s;
+      width: 100%;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: rgba(255,122,26,0.04);
+    }
+
+    .form-input.error { border-color: var(--red); }
+
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .form-hint {
+      font-size: 11px;
+      color: var(--text-soft);
+      opacity: 0.5;
+      letter-spacing: 0.04em;
+      line-height: 1.5;
+    }
+
+    .form-divider {
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Mot magique info ── */
+    .mot-magique-info {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      background: rgba(255,122,26,0.06);
+      border: 1px solid rgba(255,122,26,0.2);
+      border-radius: 10px;
+    }
+
+    .mot-magique-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+
+    .mot-magique-texte {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--text-soft);
+    }
+
+    .mot-magique-texte strong { color: var(--accent); }
+
+    /* ── Bouton submit ── */
+    .form-footer {
+      padding: 20px 28px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-submit {
+      padding: 12px 32px;
+      border-radius: 10px;
+      border: none;
+      background: var(--accent);
+      color: #000;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.12s, opacity 0.2s;
+    }
+
+    .btn-submit:hover:not(:disabled) { background: #ff8f3d; transform: translateY(-2px); }
+    .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    /* ── Succès ── */
+    .success-card {
+      background: var(--panel);
+      border: 1px solid rgba(74,222,128,0.2);
+      border-radius: 16px;
+      padding: 48px 40px;
+      text-align: center;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .success-card.visible { display: flex; }
+
+    .success-icon { font-size: 48px; }
+
+    .success-titre {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      letter-spacing: 0.1em;
+      color: var(--green);
+    }
+
+    .success-desc {
+      font-size: 13px;
+      color: var(--text-soft);
+      line-height: 1.7;
+      max-width: 400px;
+    }
+
+    .mot-magique-result {
+      background: rgba(255,122,26,0.08);
+      border: 2px solid rgba(255,122,26,0.4);
+      border-radius: 12px;
+      padding: 20px 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mot-magique-result-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-soft);
+    }
+
+    .mot-magique-result-code {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      letter-spacing: 0.3em;
+      color: var(--accent);
+    }
+
+    .mot-magique-result-hint {
+      font-size: 11px;
+      color: var(--text-soft);
+      opacity: 0.6;
+    }
+
+    .btn-copy {
+      padding: 8px 20px;
+      border-radius: 7px;
+      border: 1px solid rgba(255,122,26,0.4);
+      background: transparent;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.08em;
+      font-family: 'Barlow', sans-serif;
+      transition: background 0.2s;
+    }
+
+    .btn-copy:hover { background: rgba(255,122,26,0.1); }
+
+    /* ── Recherche ── */
+    .search-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .search-body {
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .search-titre {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.12em;
+      color: var(--text-main);
+      text-align: center;
+    }
+
+    .search-desc {
+      font-size: 13px;
+      color: var(--text-soft);
+      text-align: center;
+      line-height: 1.6;
+      max-width: 380px;
+    }
+
+    .search-input-row {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .search-input {
+      flex: 1;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: var(--text-main);
+      font-size: 16px;
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus { outline: none; border-color: var(--accent); }
+    .search-input::placeholder { opacity: 0.3; font-size: 14px; }
+
+    .btn-search {
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      background: var(--accent);
+      color: #000;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-search:hover { background: #ff8f3d; }
+    .btn-search:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── Résultat recherche ── */
+    .result-zone { width: 100%; max-width: 500px; }
+
+    .result-card {
+      background: var(--panel-light);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .result-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .result-titre {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+    }
+
+    .statut-badge {
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .statut-badge.en_attente     { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); color: #f59e0b; }
+    .statut-badge.traite_daa     { background: rgba(255,122,26,0.1); border: 1px solid rgba(255,122,26,0.3); color: var(--accent); }
+    .statut-badge.pris_en_charge { background: rgba(167,139,250,0.1); border: 1px solid rgba(167,139,250,0.3); color: var(--purple); }
+    .statut-badge.traite         { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); color: var(--green); }
+
+    .result-body { padding: 20px; }
+
+    .result-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .timeline-step {
+      display: flex;
+      gap: 14px;
+      padding-bottom: 20px;
+      position: relative;
+    }
+
+    .timeline-step:last-child { padding-bottom: 0; }
+
+    .timeline-step::before {
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 22px;
+      bottom: 0;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .timeline-step:last-child::before { display: none; }
+
+    .timeline-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      margin-top: 1px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .timeline-dot.done    { background: var(--green); color: #000; }
+    .timeline-dot.current { background: var(--accent); color: #000; }
+    .timeline-dot.pending { background: rgba(255,255,255,0.08); border: 1px solid var(--border); color: var(--text-soft); }
+
+    .timeline-content { flex: 1; padding-top: 1px; }
+
+    .timeline-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      margin-bottom: 2px;
+    }
+
+    .timeline-label.done    { color: var(--green); }
+    .timeline-label.current { color: var(--accent); }
+    .timeline-label.pending { color: var(--text-soft); opacity: 0.4; }
+
+    .timeline-detail {
+      font-size: 11px;
+      color: var(--text-soft);
+      opacity: 0.6;
+    }
+
+    .journal-dgji {
+      margin-top: 16px;
+      padding: 14px;
+      background: rgba(167,139,250,0.05);
+      border: 1px solid rgba(167,139,250,0.15);
+      border-radius: 8px;
+    }
+
+    .journal-dgji-titre {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--purple);
+      margin-bottom: 10px;
+    }
+
+    .journal-dgji-content {
+      font-size: 12px;
+      color: var(--text-soft);
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .result-error {
+      text-align: center;
+      padding: 24px;
+      color: var(--red);
+      font-size: 13px;
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 24px;
+      font-size: 11px;
+      color: var(--text-soft);
+      opacity: 0.4;
+      letter-spacing: 0.08em;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up { animation: fadeUp 0.4s ease forwards; }
+
+    /* ── Error message ── */
+    .error-msg {
+      font-size: 11px;
+      color: var(--red);
+      margin-top: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      animation: fadeUp 0.3s ease;
+      transition: opacity 0.3s;
+    }
+
+    .toast.success { background: rgba(74,222,128,0.15); border: 1px solid rgba(74,222,128,0.3); color: var(--green); }
+    .toast.error   { background: rgba(255,68,68,0.15);  border: 1px solid rgba(255,68,68,0.3);  color: var(--red); }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-eyebrow">Portail des Plaintes Externes</div>
+    <h1 class="hero-titre">Dépôt de<br><span>Plainte</span></h1>
+    <p class="hero-desc">Signalez un incident à la Feldgendarmerie. Votre demande sera traitée par nos services dans les meilleurs délais.</p>
+  </section>
+
+  <!-- Tabs -->
+  <div class="tabs-container">
+    <button class="tab-btn active" data-tab="depot">📋 Déposer une plainte</button>
+    <button class="tab-btn" data-tab="suivi">🔍 Suivre mon affaire</button>
+  </div>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Panel Dépôt -->
+    <div class="panel active" id="panel-depot">
+
+      <!-- Formulaire -->
+      <div class="form-card" id="form-container">
+        <div class="form-card-header">
+          <div class="form-card-icon">📋</div>
+          <div>
+            <div class="form-card-titre">Formulaire de plainte</div>
+            <div class="form-card-desc">Tous les champs marqués d'un * sont obligatoires</div>
+          </div>
+        </div>
+        <div class="form-body">
+
+          <!-- Plaignant -->
+          <div class="form-section">
+            <div class="form-section-label">Vos informations</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">NOM Prénom <span class="req">*</span></label>
+                <input type="text" class="form-input" id="f-nomprenom" placeholder="Ex : Dupont Jean" autocomplete="off" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Grade</label>
+                <input type="text" class="form-input" id="f-grade" placeholder="Ex : Civil, Gefreiter…" autocomplete="off" />
+              </div>
+            </div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">Discord ou Pseudo <span class="req">*</span></label>
+                <input type="text" class="form-input" id="f-discord" placeholder="Ex : 1407432875149754459 ou MonPseudo" autocomplete="off" />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-divider"></div>
+
+          <!-- Mis en cause -->
+          <div class="form-section">
+            <div class="form-section-label">Membre mis en cause</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">NOM Prénom du mis en cause</label>
+                <input type="text" class="form-input" id="f-cause-nom" placeholder="Ex : Martin Pierre" autocomplete="off" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Grade du mis en cause</label>
+                <input type="text" class="form-input" id="f-cause-grade" placeholder="Ex : Feldwebel" autocomplete="off" />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-divider"></div>
+
+          <!-- Faits -->
+          <div class="form-section">
+            <div class="form-section-label">Détail de l'incident</div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">Explication des faits <span class="req">*</span></label>
+                <textarea class="form-textarea" id="f-faits" placeholder="Décrivez précisément ce qui s'est passé, quand, où et dans quel contexte…"></textarea>
+              </div>
+            </div>
+            <div class="form-row single">
+              <div class="form-group">
+                <label class="form-label">Suggestion de sanction</label>
+                <input type="text" class="form-input" id="f-sanction" placeholder="Ex : Avertissement, rétrogradation…" autocomplete="off" />
+                <div class="form-hint">Optionnel — la décision finale appartient à nos services.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-divider"></div>
+
+          <!-- Mot magique info -->
+          <div class="mot-magique-info">
+            <div class="mot-magique-icon">🔑</div>
+            <div class="mot-magique-texte">
+              À la validation de votre plainte, un <strong>mot magique</strong> vous sera attribué. Conservez-le précieusement — il vous permettra de suivre l'évolution de votre affaire à tout moment.
+            </div>
+          </div>
+
+        </div>
+        <div class="form-footer">
+          <button class="btn-submit" id="btn-submit">Soumettre la plainte →</button>
+        </div>
+      </div>
+
+      <!-- Succès -->
+      <div class="success-card" id="success-card">
+        <div class="success-icon">✅</div>
+        <div class="success-titre">Plainte enregistrée</div>
+        <p class="success-desc">Votre plainte a été transmise à nos services. Notez soigneusement votre mot magique ci-dessous pour suivre l'avancement de votre affaire.</p>
+        <div class="mot-magique-result">
+          <div class="mot-magique-result-label">Votre mot magique</div>
+          <div class="mot-magique-result-code" id="result-code">--------</div>
+          <div class="mot-magique-result-hint">Gardez ce code en lieu sûr</div>
+        </div>
+        <button class="btn-copy" id="btn-copy">📋 Copier le code</button>
+        <p style="font-size:12px;color:var(--text-soft);opacity:0.5;text-align:center;line-height:1.6">
+          Rendez-vous dans l'onglet <strong style="color:var(--text-soft);opacity:1">"Suivre mon affaire"</strong><br>pour consulter le statut de votre dossier.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Panel Suivi -->
+    <div class="panel" id="panel-suivi">
+      <div class="search-card">
+        <div class="search-body">
+          <div class="search-titre">Suivre mon affaire</div>
+          <p class="search-desc">Saisissez votre mot magique pour consulter le statut de votre dossier et les éventuelles mises à jour.</p>
+          <div class="search-input-row">
+            <input type="text" class="search-input" id="search-input" placeholder="XXXXXXXX" maxlength="8" autocomplete="off" />
+            <button class="btn-search" id="btn-search">Rechercher</button>
+          </div>
+          <div class="result-zone" id="result-zone"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    Feldgendarmerie — Portail Externe — Usage Roleplay uniquement
+  </footer>
+
+  <script>
+    const SUPABASE_URL      = "https://cpmofkbdpjttclqeagae.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwbW9ma2JkcGp0dGNscWVhZ2FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxNzI3ODIsImV4cCI6MjA4ODc0ODc4Mn0.bRDAKdheG2DYRncJGPH6idAw8NWA6tw3PTSAcsCZVl4";
+    const INCIDENTS_URL     = `${SUPABASE_URL}/functions/v1/incidents`;
+
+    // ── Tabs ──────────────────────────────────────────────────
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(`panel-${btn.dataset.tab}`).classList.add("active");
+      });
+    });
+
+    // ── Submit plainte ────────────────────────────────────────
+    document.getElementById("btn-submit").addEventListener("click", async () => {
+      const nomprenom      = document.getElementById("f-nomprenom").value.trim();
+      const grade          = document.getElementById("f-grade").value.trim();
+      const discord        = document.getElementById("f-discord").value.trim();
+      const miseEnCauseNom = document.getElementById("f-cause-nom").value.trim();
+      const miseEnCauseGrade = document.getElementById("f-cause-grade").value.trim();
+      const faits          = document.getElementById("f-faits").value.trim();
+      const sanction       = document.getElementById("f-sanction").value.trim();
+
+      // Validation
+      let valid = true;
+      ["f-nomprenom","f-discord","f-faits"].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) { el.classList.add("error"); valid = false; }
+        else el.classList.remove("error");
+      });
+      if (!valid) { afficherToast("Veuillez remplir les champs obligatoires.", "error"); return; }
+
+      const btn = document.getElementById("btn-submit");
+      btn.disabled = true;
+      btn.textContent = "Envoi en cours…";
+
+      try {
+        const res  = await fetch(`${INCIDENTS_URL}?action=soumettre`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` },
+          body: JSON.stringify({ nomprenom, grade, discord, miseEnCauseNom, miseEnCauseGrade, faits, sanction }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        // Affiche le succès
+        document.getElementById("form-container").style.display = "none";
+        const card = document.getElementById("success-card");
+        card.classList.add("visible", "fade-up");
+        document.getElementById("result-code").textContent = data.motMagique;
+
+        document.getElementById("btn-copy").addEventListener("click", () => {
+          navigator.clipboard.writeText(data.motMagique);
+          afficherToast("Code copié !", "success");
+        });
+
+      } catch (err) {
+        afficherToast("Erreur : " + err.message, "error");
+        btn.disabled = false;
+        btn.textContent = "Soumettre la plainte →";
+      }
+    });
+
+    // ── Recherche par mot magique ─────────────────────────────
+    const searchInput = document.getElementById("search-input");
+
+    document.getElementById("btn-search").addEventListener("click", rechercher);
+    searchInput.addEventListener("keydown", e => { if (e.key === "Enter") rechercher(); });
+    searchInput.addEventListener("input", () => {
+      searchInput.value = searchInput.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    });
+
+    async function rechercher() {
+      const mot  = searchInput.value.trim().toUpperCase();
+      const zone = document.getElementById("result-zone");
+      if (mot.length !== 8) { afficherToast("Le mot magique fait 8 caractères.", "error"); return; }
+
+      const btn = document.getElementById("btn-search");
+      btn.disabled = true; btn.textContent = "Recherche…";
+      zone.innerHTML = "";
+
+      try {
+        const res  = await fetch(`${INCIDENTS_URL}?action=rechercher&mot=${mot}`, {
+          headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": `Bearer ${SUPABASE_ANON_KEY}` },
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        if (!data.found) {
+          zone.innerHTML = `<div class="result-error">❌ Aucune affaire trouvée pour ce code.</div>`;
+          return;
+        }
+
+        afficherResultat(data, zone);
+
+      } catch (err) {
+        zone.innerHTML = `<div class="result-error">⚠️ ${esc(err.message)}</div>`;
+      } finally {
+        btn.disabled = false; btn.textContent = "Rechercher";
+      }
+    }
+
+    function afficherResultat(data, zone) {
+      const statuts = ["en_attente", "traite_daa", "pris_en_charge", "traite"];
+      const labels  = ["Reçue — En attente", "Transmise à la DGJI", "Prise en charge", "Affaire traitée"];
+      const icons   = ["⏳", "📨", "⚖️", "✅"];
+      const idx     = statuts.indexOf(data.statut);
+
+      const steps = statuts.map((s, i) => {
+        const state = i < idx ? "done" : i === idx ? "current" : "pending";
+        return `
+          <div class="timeline-step">
+            <div class="timeline-dot ${state}">${state === "done" ? "✓" : state === "current" ? icons[i] : ""}</div>
+            <div class="timeline-content">
+              <div class="timeline-label ${state}">${labels[i]}</div>
+              ${i === 0 && data.date ? `<div class="timeline-detail">Déposée le ${esc(data.date)}</div>` : ""}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      const journalHtml = (data.statut === "pris_en_charge" || data.statut === "traite") && data.journalDGJI ? `
+        <div class="journal-dgji">
+          <div class="journal-dgji-titre">📒 Journal de l'affaire</div>
+          <div class="journal-dgji-content">${esc(data.journalDGJI)}</div>
+        </div>
+      ` : "";
+
+      zone.innerHTML = `
+        <div class="result-card fade-up">
+          <div class="result-header">
+            <div class="result-titre">Dossier #${esc(searchInput.value)}</div>
+            <div class="statut-badge ${data.statut}">${esc(data.statutLabel)}</div>
+          </div>
+          <div class="result-body">
+            <div class="result-timeline">${steps}</div>
+            ${journalHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    function afficherToast(msg, type = "success") {
+      const t = document.createElement("div");
+      t.className = `toast ${type}`;
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => { t.style.opacity = "0"; setTimeout(() => t.remove(), 300); }, 3000);
+    }
+
+    function esc(str) {
+      return String(str || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    }
+  </script>
+</body>
+</html>
