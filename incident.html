@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Feldgendarmerie — Site fermé</title>
+  <style>
+    :root {
+      --bg:      #0a0c0f;
+      --panel:   #111418;
+      --border:  #1c1f24;
+      --accent:  #ff7a1a;
+      --glow:    rgba(255, 122, 26, 0.35);
+      --text:    #f2f2f2;
+      --muted:   #6a6f7a;
+      --soft:    #b5b5b5;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Halo ambiant */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 40%, rgba(255,122,26,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── Carte centrale ── */
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 56px 52px;
+      max-width: 640px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 36px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Trait supérieur coloré */
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 0 0 2px 2px;
+      box-shadow: 0 0 18px var(--glow);
+    }
+
+    /* ── En-tête organisation ── */
+    .org {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .org-name {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .org-sub {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+    }
+
+    /* ── Séparateur ── */
+    .sep {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border) 30%, var(--border) 70%, transparent);
+    }
+
+    /* ── Dates de service ── */
+    .dates {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--soft);
+      letter-spacing: 0.06em;
+    }
+
+    .dates-value {
+      font-size: 14px;
+      color: var(--text);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Icône / emblème ── */
+    .emblem {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: rgba(255,122,26,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Message principal ── */
+    .status-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      text-align: center;
+    }
+
+    .status-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--muted);
+    }
+
+    .status-main {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.04em;
+      line-height: 1.3;
+    }
+
+    .status-main span {
+      color: var(--accent);
+    }
+
+    .status-sub {
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ── Message de remerciement ── */
+    .merci {
+      font-size: 14px;
+      color: var(--soft);
+      line-height: 1.8;
+      text-align: center;
+      letter-spacing: 0.03em;
+      max-width: 480px;
+
+      /* ─── MODIFIE CE TEXTE ─── */
+      /* Remplace la valeur de l'attribut "data-texte" dans le HTML, ou édite directement ici */
+    }
+
+    /* ── Signature ── */
+    .signature {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .signature-titre {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+    }
+
+    .signature-nom {
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      font-weight: 600;
+    }
+
+    .signature-grade {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+
+    <!-- En-tête -->
+    <div class="org">
+      <div class="org-name">Feldgendarmerie</div>
+      <div class="org-sub">Interface Opérationnelle</div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- Dates de service -->
+    <div class="dates">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <span class="status-label">Ouverture</span>
+        <!--
+          ╔══════════════════════════════════════════╗
+          ║  MODIFIE ICI : date de début du service  ║
+          ╚══════════════════════════════════════════╝
+        -->
+        <span class="dates-value">01 / 01 / 2026</span>
+      </div>
+
+      <svg width="40" height="1" viewBox="0 0 40 1">
+        <line x1="0" y1="0" x2="40" y2="0" stroke="#1c1f24" stroke-width="1"/>
+      </svg>
+
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <span class="status-label">Fermeture</span>
+        <!--
+          ╔══════════════════════════════════════════╗
+          ║  MODIFIE ICI : date de fin du service    ║
+          ╚══════════════════════════════════════════╝
+        -->
+        <span class="dates-value">11 / 04 / 2026</span>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- Emblème SVG simple -->
+    <div class="emblem">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <polygon points="16,3 29,10 29,22 16,29 3,22 3,10"
+                 stroke="#ff7a1a" stroke-width="1.2" fill="rgba(255,122,26,0.06)"/>
+        <line x1="16" y1="3" x2="16" y2="29" stroke="#ff7a1a" stroke-width="0.6" opacity="0.3"/>
+        <line x1="3" y1="10" x2="29" y2="22" stroke="#ff7a1a" stroke-width="0.6" opacity="0.3"/>
+        <line x1="29" y1="10" x2="3"  y2="22" stroke="#ff7a1a" stroke-width="0.6" opacity="0.3"/>
+        <circle cx="16" cy="16" r="3" fill="#ff7a1a" opacity="0.7"/>
+      </svg>
+    </div>
+
+    <!-- Message principal -->
+    <div class="status-block">
+      <div class="status-label">Statut du site</div>
+      <div class="status-main">
+        Indisponible<br>
+        <span>par décision du responsable</span><br>
+        de régiment
+      </div>
+      <div class="status-sub">Accès désactivé</div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- Message de remerciement -->
+    <div class="merci">
+      <!--
+        ╔══════════════════════════════════════════════════════╗
+        ║  MODIFIE ICI : ton message de remerciement personnel ║
+        ║  Remplace ce paragraphe par ton propre texte.        ║
+        ╚══════════════════════════════════════════════════════╝
+      -->
+      STUGART Alphons remercie votre utilisation du site. Celui-ci est fermer après l'arret d'utilisation. Une belle journée à vous,
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- Signature -->
+    <div class="signature">
+      <div class="signature-titre">Décision émise par</div>
+      <!--
+        ╔═══════════════════════════════════════════╗
+        ║  MODIFIE ICI : nom du responsable         ║
+        ╚═══════════════════════════════════════════╝
+      -->
+      <div class="signature-nom">MULLER Jean</div>
+      <div class="signature-grade">Responsable de régiment</div>
+    </div>
+
+  </div>
+</body>
+</html>
